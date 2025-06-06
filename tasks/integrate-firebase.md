@@ -3,10 +3,10 @@
 ## High Priority Setup Tasks
 
 ### 1. Firebase Project Setup
-- [ ] Create Firebase project at https://console.firebase.google.com/
-- [ ] Add Android app with package name: `io.github.mikan.sample.pushnotification`
-- [ ] Download google-services.json file
-- [ ] Place google-services.json in `app/` directory
+- [x] Create Firebase project at https://console.firebase.google.com/
+- [x] Add Android app with package name: `io.github.mikan.sample.pushnotification`
+- [x] Download google-services.json file
+- [x] Place google-services.json in `app/` directory
 - [ ] Verify google-services.json is in .gitignore
 
 ### 2. Dependencies Configuration
