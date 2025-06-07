@@ -1,0 +1,2 @@
+- read $ARGUMENTS and update todo
+- Update $ARGUMENTS each time a TODO is completed.
