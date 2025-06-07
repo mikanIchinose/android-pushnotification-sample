@@ -7,27 +7,27 @@
 - [x] Add Android app with package name: `io.github.mikan.sample.pushnotification`
 - [x] Download google-services.json file
 - [x] Place google-services.json in `app/` directory
-- [ ] Verify google-services.json is in .gitignore
+- [x] Verify google-services.json is in .gitignore
 
 ### 2. Dependencies Configuration
-- [ ] Add Google services plugin to project-level build.gradle.kts
-- [ ] Add Firebase BOM and FCM dependencies to app-level build.gradle.kts
-- [ ] Apply Google services plugin in app-level build.gradle.kts
-- [ ] Update libs.versions.toml with Firebase versions
+- [x] Add Google services plugin to project-level build.gradle.kts
+- [x] Add Firebase BOM and FCM dependencies to app-level build.gradle.kts
+- [x] Apply Google services plugin in app-level build.gradle.kts
+- [x] Update libs.versions.toml with Firebase versions
 
 ### 3. Android Manifest Configuration
-- [ ] Add INTERNET permission to AndroidManifest.xml
-- [ ] Add WAKE_LOCK permission (optional)
-- [ ] Add notification icon metadata
-- [ ] Register FirebaseMessagingService in manifest
+- [x] Add INTERNET permission to AndroidManifest.xml
+- [x] Add WAKE_LOCK permission (optional)
+- [x] Add notification icon metadata
+- [x] Register FirebaseMessagingService in manifest
 
 ## High Priority Core Implementation
 
 ### 4. Firebase Messaging Service
-- [ ] Create MyFirebaseMessagingService class extending FirebaseMessagingService
-- [ ] Implement onMessageReceived method for handling push notifications
-- [ ] Implement onNewToken method for token refresh handling
-- [ ] Add proper error handling and logging
+- [x] Create MyFirebaseMessagingService class extending FirebaseMessagingService
+- [x] Implement onMessageReceived method for handling push notifications
+- [x] Implement onNewToken method for token refresh handling
+- [x] Add proper error handling and logging
 
 ### 5. MainActivity Integration
 - [ ] Add FCM token retrieval logic to MainActivity
