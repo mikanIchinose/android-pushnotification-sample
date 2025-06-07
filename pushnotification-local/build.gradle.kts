@@ -1,10 +1,10 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
-    namespace = "io.github.mikan.pushnotification"
+    namespace = "io.github.mikan.pushnotification.local"
     compileSdk = 35
 
     defaultConfig {
@@ -36,8 +36,4 @@ dependencies {
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxAppcompat)
     implementation(libs.material)
-    
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidxJunit)
-    androidTestImplementation(libs.androidxEspressoCore)
 }

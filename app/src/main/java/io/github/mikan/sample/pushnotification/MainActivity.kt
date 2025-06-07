@@ -46,10 +46,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.github.mikan.pushnotification.local.NotificationHelper
+import io.github.mikan.pushnotification.local.NotificationScheduler
+import io.github.mikan.pushnotification.local.PermissionHelper
 import io.github.mikan.sample.pushnotification.ui.theme.PushNotificationTheme
-import io.github.mikan.pushnotification.NotificationHelper
-import io.github.mikan.pushnotification.NotificationScheduler
-import io.github.mikan.pushnotification.PermissionHelper
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -302,7 +302,11 @@ fun NotificationItem(
                 IconButton(
                     onClick = {
                         // 実際の通知もキャンセル
-                        NotificationScheduler.cancelNotification(context, notification.id, NotificationReceiver::class.java)
+                        NotificationScheduler.cancelNotification(
+                            context,
+                            notification.id,
+                            NotificationReceiver::class.java
+                        )
                         onDelete()
                     }
                 ) {

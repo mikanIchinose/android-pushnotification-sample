@@ -1,5 +1,6 @@
-package io.github.mikan.pushnotification
+package io.github.mikan.pushnotification.local
 
+import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -37,12 +38,12 @@ object NotificationHelper {
         content: String,
         targetActivity: Class<*>? = null
     ) {
-        val intent = targetActivity?.let { 
+        val intent = targetActivity?.let {
             Intent(context, it).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
         }
-        
+
         val pendingIntent = intent?.let {
             PendingIntent.getActivity(
                 context,
@@ -53,7 +54,7 @@ object NotificationHelper {
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))

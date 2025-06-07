@@ -1,7 +1,8 @@
-package io.github.mikan.pushnotification
+package io.github.mikan.pushnotification.local
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,7 +14,7 @@ import androidx.core.content.ContextCompat
 
 object PermissionHelper {
     const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
-    
+
     fun hasNotificationPermission(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(
@@ -24,7 +25,7 @@ object PermissionHelper {
             true
         }
     }
-    
+
     fun requestNotificationPermission(activity: Activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(
@@ -34,7 +35,7 @@ object PermissionHelper {
             )
         }
     }
-    
+
     fun shouldShowNotificationPermissionRationale(activity: Activity): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.shouldShowRequestPermissionRationale(
@@ -45,7 +46,7 @@ object PermissionHelper {
             false
         }
     }
-    
+
     fun openNotificationSettings(context: Context) {
         val intent = Intent().apply {
             action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -53,16 +54,16 @@ object PermissionHelper {
         }
         context.startActivity(intent)
     }
-    
+
     fun canScheduleExactAlarms(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.canScheduleExactAlarms()
         } else {
             true
         }
     }
-    
+
     fun requestExactAlarmPermission(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
