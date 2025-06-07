@@ -1,4 +1,4 @@
-package io.github.mikan.sample.pushnotification
+package io.github.mikan.pushnotification
 
 import android.Manifest
 import android.app.Activity

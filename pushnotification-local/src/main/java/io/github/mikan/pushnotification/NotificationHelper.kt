@@ -1,4 +1,4 @@
-package io.github.mikan.sample.pushnotification
+package io.github.mikan.pushnotification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -34,18 +34,23 @@ object NotificationHelper {
         context: Context,
         notificationId: Int,
         title: String,
-        content: String
+        content: String,
+        targetActivity: Class<*>? = null
     ) {
-        val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val intent = targetActivity?.let { 
+            Intent(context, it).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
         }
         
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent = intent?.let {
+            PendingIntent.getActivity(
+                context,
+                0,
+                it,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
@@ -53,7 +58,9 @@ object NotificationHelper {
             .setContentText(content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
+            .apply {
+                pendingIntent?.let { setContentIntent(it) }
+            }
             .setAutoCancel(true)
             .build()
 

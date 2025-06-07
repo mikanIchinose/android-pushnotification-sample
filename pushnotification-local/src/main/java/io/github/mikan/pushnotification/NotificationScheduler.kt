@@ -1,11 +1,10 @@
-package io.github.mikan.sample.pushnotification
+package io.github.mikan.pushnotification
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import java.util.Calendar
 
 object NotificationScheduler {
     
@@ -14,9 +13,10 @@ object NotificationScheduler {
         notificationId: Int,
         title: String,
         content: String,
-        timeInMillis: Long
+        timeInMillis: Long,
+        receiverClass: Class<*>
     ) {
-        val intent = Intent(context, NotificationReceiver::class.java).apply {
+        val intent = Intent(context, receiverClass).apply {
             putExtra("notification_id", notificationId)
             putExtra("title", title)
             putExtra("content", content)
@@ -46,8 +46,8 @@ object NotificationScheduler {
         }
     }
     
-    fun cancelNotification(context: Context, notificationId: Int) {
-        val intent = Intent(context, NotificationReceiver::class.java)
+    fun cancelNotification(context: Context, notificationId: Int, receiverClass: Class<*>) {
+        val intent = Intent(context, receiverClass)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             notificationId,
@@ -65,9 +65,10 @@ object NotificationScheduler {
         title: String,
         content: String,
         timeInMillis: Long,
-        intervalMillis: Long
+        intervalMillis: Long,
+        receiverClass: Class<*>
     ) {
-        val intent = Intent(context, NotificationReceiver::class.java).apply {
+        val intent = Intent(context, receiverClass).apply {
             putExtra("notification_id", notificationId)
             putExtra("title", title)
             putExtra("content", content)

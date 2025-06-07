@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "PushNotification"
 include(":app")
+include(":pushnotification-local")
  
