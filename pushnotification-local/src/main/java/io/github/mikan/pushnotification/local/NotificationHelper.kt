@@ -1,6 +1,5 @@
 package io.github.mikan.pushnotification.local
 
-import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,16 +17,14 @@ object NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
+                CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = CHANNEL_DESCRIPTION
                 enableVibration(true)
                 enableLights(true)
             }
 
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+            context.notificationManager.createNotificationChannel(channel)
         }
     }
 
@@ -53,19 +50,14 @@ object NotificationHelper {
             )
         }
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_dialog_info)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(content))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .apply {
-                pendingIntent?.let { setContentIntent(it) }
-            }
-            .setAutoCancel(true)
-            .build()
-
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(notificationId, notification)
+        context.notify(CHANNEL_ID, notificationId) {
+            setSmallIcon(R.drawable.ic_notification)
+            setContentTitle(title)
+            setContentText(content)
+            setStyle(NotificationCompat.BigTextStyle().bigText(content))
+            setPriority(NotificationCompat.PRIORITY_HIGH)
+            pendingIntent?.let { setContentIntent(it) }
+            setAutoCancel(true)
+        }
     }
 }
