@@ -3,7 +3,6 @@ package io.github.mikan.sample.pushnotification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
@@ -23,8 +22,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
         Log.d(TAG, "From: ${remoteMessage.from}")
 
-        remoteMessage.data.isNotEmpty().let {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
+        remoteMessage.data.takeIf { it.isNotEmpty() }?.let {
+            Log.d(TAG, "Message data payload: $it")
         }
 
         remoteMessage.notification?.let {
@@ -38,6 +37,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
     }
 
+    /**
+     * PendingIntentを使用して通知を作成・表示します。
+     * ユーザーが通知をタップするとMainActivityが起動し、
+     * アプリが既に起動中の場合は既存のActivityを前面に表示します。
+     */
     private fun sendNotification(title: String?, messageBody: String?) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -48,15 +52,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         createNotificationChannel()
 
-        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(title ?: "FCM Message")
-            .setContentText(messageBody ?: "")
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+        notifyWithBuilder(NOTIFICATION_ID, CHANNEL_ID) {
+            setSmallIcon(R.drawable.ic_launcher_foreground)
+            setContentTitle(title ?: "FCM Message")
+            setContentText(messageBody ?: "")
+            setAutoCancel(true)
+            setContentIntent(pendingIntent)
+        }
     }
 
     private fun createNotificationChannel() {
@@ -67,8 +69,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
