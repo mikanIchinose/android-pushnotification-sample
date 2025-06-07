@@ -8,40 +8,40 @@
 ### 高優先度タスク
 
 #### 1. AlarmManagerを使用したスケジュール通知の実装
-- [ ] `AlarmManager`を使用して指定時間に通知をトリガー
-- [ ] `PendingIntent`の作成と設定
-- [ ] 正確なアラーム（`setExactAndAllowWhileIdle`）の実装
-- [ ] バッテリー最適化への対応
+- [x] `AlarmManager`を使用して指定時間に通知をトリガー
+- [x] `PendingIntent`の作成と設定
+- [x] 正確なアラーム（`setExactAndAllowWhileIdle`）の実装
+- [x] バッテリー最適化への対応
 
 #### 2. BroadcastReceiverクラスの作成と通知トリガー処理
-- [ ] `BroadcastReceiver`を継承したクラスの作成
-- [ ] アラームイベントの受信処理
-- [ ] 通知データの取得と処理
-- [ ] 通知表示の実行
+- [x] `BroadcastReceiver`を継承したクラスの作成
+- [x] アラームイベントの受信処理
+- [x] 通知データの取得と処理
+- [x] 通知表示の実行
 
 #### 3. 通知チャンネルの作成（Android 8.0+対応）
-- [ ] `NotificationChannel`の作成
-- [ ] チャンネルの重要度設定
-- [ ] チャンネルの説明とグループ設定
-- [ ] Android 8.0未満との互換性対応
+- [x] `NotificationChannel`の作成
+- [x] チャンネルの重要度設定
+- [x] チャンネルの説明とグループ設定
+- [x] Android 8.0未満との互換性対応
 
 #### 4. NotificationManagerを使用した通知表示機能
-- [ ] `NotificationCompat.Builder`を使用した通知構築
-- [ ] 通知のタイトル、本文、アイコン設定
-- [ ] アクション（タップ時の動作）設定
-- [ ] 通知スタイル（BigText、BigPicture等）の適用
+- [x] `NotificationCompat.Builder`を使用した通知構築
+- [x] 通知のタイトル、本文、アイコン設定
+- [x] アクション（タップ時の動作）設定
+- [x] 通知スタイル（BigText、BigPicture等）の適用
 
 #### 5. 通知権限のリクエスト処理（Android 13+対応）
-- [ ] `POST_NOTIFICATIONS`権限の確認
-- [ ] 権限リクエストダイアログの表示
-- [ ] 権限拒否時の代替処理
-- [ ] 設定画面への誘導
+- [x] `POST_NOTIFICATIONS`権限の確認
+- [x] 権限リクエストダイアログの表示
+- [x] 権限拒否時の代替処理
+- [x] 設定画面への誘導
 
 #### 6. AndroidManifest.xmlの権限とレシーバー設定
-- [ ] 必要な権限の宣言
-- [ ] `BroadcastReceiver`の登録
-- [ ] `WAKE_LOCK`権限の設定
-- [ ] `SCHEDULE_EXACT_ALARM`権限の設定（Android 12+）
+- [x] 必要な権限の宣言
+- [x] `BroadcastReceiver`の登録
+- [x] `WAKE_LOCK`権限の設定
+- [x] `SCHEDULE_EXACT_ALARM`権限の設定（Android 12+）
 
 ### 中優先度タスク
 

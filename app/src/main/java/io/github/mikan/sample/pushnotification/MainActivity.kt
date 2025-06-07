@@ -1,5 +1,6 @@
 package io.github.mikan.sample.pushnotification
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        NotificationHelper.createNotificationChannel(this)
+        
+        if (!PermissionHelper.hasNotificationPermission(this)) {
+            PermissionHelper.requestNotificationPermission(this)
+        }
+        
+        if (!PermissionHelper.canScheduleExactAlarms(this)) {
+            PermissionHelper.requestExactAlarmPermission(this)
+        }
+        
         setContent {
             PushNotificationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -24,6 +36,25 @@ class MainActivity : ComponentActivity() {
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
+                }
+            }
+        }
+    }
+    
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        
+        when (requestCode) {
+            PermissionHelper.NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    if (!PermissionHelper.shouldShowNotificationPermissionRationale(this)) {
+                        PermissionHelper.openNotificationSettings(this)
+                    }
                 }
             }
         }
