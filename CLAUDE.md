@@ -3,7 +3,10 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this
 repository.
 
+## General
+
 - Please answer in Japanese
+- follow @docs/git.md when use git
 
 ## Project Overview
 
@@ -74,10 +77,3 @@ Material 3 theming.
 
 - Unit tests: JUnit5 + power-assert
 - Compose testing: UI test framework included for Compose components
-
-## Git
-
-- commit without co-author-by
-- use conventional-commit message format
-- write title in English
-- write description in Japanese if needed
