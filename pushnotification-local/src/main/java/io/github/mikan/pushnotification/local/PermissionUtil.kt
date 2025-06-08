@@ -31,20 +31,6 @@ fun Context.hasNotificationPermission(): Boolean {
 }
 
 /**
- * 通知権限をユーザーにリクエストする
- * Android 13以降でのみ権限ダイアログを表示
- */
-fun Activity.requestNotificationPermission() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-            NOTIFICATION_PERMISSION_REQUEST_CODE
-        )
-    }
-}
-
-/**
  * 通知権限の説明表示が必要かを判定する
  * ユーザーが一度権限を拒否した場合に説明UIを表示するかの判断に使用
  */

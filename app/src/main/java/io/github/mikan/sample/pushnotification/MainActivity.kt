@@ -1,10 +1,12 @@
 package io.github.mikan.sample.pushnotification
 
-import android.content.pm.PackageManager
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,14 +48,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.mikan.pushnotification.local.NOTIFICATION_PERMISSION_REQUEST_CODE
 import io.github.mikan.pushnotification.local.NotificationScheduler
 import io.github.mikan.pushnotification.local.canScheduleExactAlarms
 import io.github.mikan.pushnotification.local.createNotificationChannel
 import io.github.mikan.pushnotification.local.hasNotificationPermission
 import io.github.mikan.pushnotification.local.openNotificationSettings
 import io.github.mikan.pushnotification.local.requestExactAlarmPermission
-import io.github.mikan.pushnotification.local.requestNotificationPermission
 import io.github.mikan.pushnotification.local.shouldShowNotificationPermissionRationale
 import io.github.mikan.sample.pushnotification.ui.theme.PushNotificationTheme
 import java.text.SimpleDateFormat
@@ -62,6 +62,16 @@ import java.util.Date
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
+    
+    private val requestNotificationPermissionLauncher = 
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
+                if (!shouldShowNotificationPermissionRationale()) {
+                    openNotificationSettings()
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -69,7 +79,9 @@ class MainActivity : ComponentActivity() {
         createNotificationChannel()
 
         if (!hasNotificationPermission()) {
-            requestNotificationPermission()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
 
         if (!canScheduleExactAlarms()) {
@@ -82,25 +94,6 @@ class MainActivity : ComponentActivity() {
                     NotificationSchedulerScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
-                }
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                } else {
-                    if (!shouldShowNotificationPermissionRationale()) {
-                        openNotificationSettings()
-                    }
                 }
             }
         }
