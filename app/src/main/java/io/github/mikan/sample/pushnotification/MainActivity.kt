@@ -46,9 +46,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.mikan.pushnotification.local.NotificationHelper
+import io.github.mikan.pushnotification.local.NOTIFICATION_PERMISSION_REQUEST_CODE
 import io.github.mikan.pushnotification.local.NotificationScheduler
-import io.github.mikan.pushnotification.local.PermissionHelper
+import io.github.mikan.pushnotification.local.canScheduleExactAlarms
+import io.github.mikan.pushnotification.local.createNotificationChannel
+import io.github.mikan.pushnotification.local.hasNotificationPermission
+import io.github.mikan.pushnotification.local.openNotificationSettings
+import io.github.mikan.pushnotification.local.requestExactAlarmPermission
+import io.github.mikan.pushnotification.local.requestNotificationPermission
+import io.github.mikan.pushnotification.local.shouldShowNotificationPermissionRationale
 import io.github.mikan.sample.pushnotification.ui.theme.PushNotificationTheme
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -60,14 +66,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        NotificationHelper.createNotificationChannel(this)
+        createNotificationChannel()
 
-        if (!PermissionHelper.hasNotificationPermission(this)) {
-            PermissionHelper.requestNotificationPermission(this)
+        if (!hasNotificationPermission()) {
+            requestNotificationPermission()
         }
 
-        if (!PermissionHelper.canScheduleExactAlarms(this)) {
-            PermissionHelper.requestExactAlarmPermission(this)
+        if (!canScheduleExactAlarms()) {
+            requestExactAlarmPermission()
         }
 
         setContent {
@@ -89,11 +95,11 @@ class MainActivity : ComponentActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
-            PermissionHelper.NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
-                    if (!PermissionHelper.shouldShowNotificationPermissionRationale(this)) {
-                        PermissionHelper.openNotificationSettings(this)
+                    if (!shouldShowNotificationPermissionRationale()) {
+                        openNotificationSettings()
                     }
                 }
             }

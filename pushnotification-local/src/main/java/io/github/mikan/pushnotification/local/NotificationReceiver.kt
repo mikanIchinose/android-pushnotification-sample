@@ -11,11 +11,12 @@ open class NotificationReceiver : BroadcastReceiver() {
         val title = intent.getStringExtra("title") ?: "通知"
         val content = intent.getStringExtra("content") ?: "新しい通知があります"
 
-        NotificationHelper.createNotificationChannel(context)
+        context.createNotificationChannel()
 
         // 通知をタップした時に開くActivityを取得
-        val targetActivity = getTargetActivity()
-        NotificationHelper.showNotification(context, notificationId, title, content, targetActivity)
+        getTargetActivity()?.let {
+            context.showNotification(notificationId, title, content, it)
+        }
     }
 
     // オーバーライド可能なメソッド：通知タップ時に開くActivityを指定
