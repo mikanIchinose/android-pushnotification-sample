@@ -1,2 +1,3 @@
 commit staged files
-follow @docs/git.md
+
+- following @docs/instructions/git.instructions.md

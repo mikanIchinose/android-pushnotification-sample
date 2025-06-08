@@ -1,2 +1,3 @@
-- read $ARGUMENTS and update todo
-- Update $ARGUMENTS each time a TODO is completed.
+- Make me select a task to do at docs/tasks
+- Read the task file and update TODO
+- Update the task file each time a TODO is completed.

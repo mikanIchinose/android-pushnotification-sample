@@ -6,7 +6,7 @@ repository.
 ## General
 
 - Please answer in Japanese
-- follow @docs/git.md when use git
+- follow @docs/instructions/git.instructions.md when use git
 
 ## Project Overview
 
