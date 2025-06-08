@@ -62,31 +62,17 @@ import java.util.Date
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
-    
-    private val requestNotificationPermissionLauncher = 
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (!isGranted) {
-                if (!shouldShowNotificationPermissionRationale()) {
-                    openNotificationSettings()
-                }
-            }
-        }
+
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+        ::handleNotificationPermissionResult,
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        createNotificationChannel()
-
-        if (!hasNotificationPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-
-        if (!canScheduleExactAlarms()) {
-            requestExactAlarmPermission()
-        }
+        setupNotifications()
 
         setContent {
             PushNotificationTheme {
@@ -97,6 +83,32 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun setupNotifications() {
+        createNotificationChannel()
+        requestNotificationPermissionIfNeeded()
+        requestExactAlarmPermissionIfNeeded()
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (hasNotificationPermission()) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+        requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    private fun requestExactAlarmPermissionIfNeeded() {
+        if (canScheduleExactAlarms()) return
+
+        requestExactAlarmPermission()
+    }
+
+    private fun handleNotificationPermissionResult(isGranted: Boolean) {
+        if (isGranted) return
+        if (shouldShowNotificationPermissionRationale()) return
+
+        openNotificationSettings()
     }
 }
 
