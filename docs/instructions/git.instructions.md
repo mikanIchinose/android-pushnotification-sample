@@ -1,0 +1,4 @@
+- Use conventional-commit message format.
+- Write the title in English.
+- Write the description in Japanese if needed.
+- Make sure the description clearly conveys the implementation intent when reviewed later.
