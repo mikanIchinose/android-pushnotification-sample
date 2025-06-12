@@ -5,6 +5,7 @@ coreKtx = "1.16.0"
 lifecycle = "2.9.1"
 activityCompose = "1.10.1"
 composeBom = "2025.06.00"
+kotlinxSerialization = "1.8.1"
 
 [libraries]
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -19,10 +20,11 @@ androidxUiTooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidxUiToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidxUiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidxMaterial3 = { group = "androidx.compose.material3", name = "material3" }
+kotlinxSerializationJson = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinCompose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

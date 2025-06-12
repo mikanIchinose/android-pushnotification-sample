@@ -38,6 +38,7 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +56,8 @@ import io.github.mikan.pushnotification.local.hasNotificationPermission
 import io.github.mikan.pushnotification.local.openNotificationSettings
 import io.github.mikan.pushnotification.local.requestExactAlarmPermission
 import io.github.mikan.pushnotification.local.shouldShowNotificationPermissionRationale
+import io.github.mikan.pushnotification.local.NotificationStorage
+import io.github.mikan.pushnotification.local.StoredNotification
 import io.github.mikan.sample.pushnotification.ui.theme.PushNotificationTheme
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -123,6 +126,8 @@ data class ScheduledNotification(
 @Composable
 fun NotificationSchedulerScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val storage = remember { NotificationStorage.getInstance(context) }
+    
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var selectedDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
@@ -131,6 +136,18 @@ fun NotificationSchedulerScreen(modifier: Modifier = Modifier) {
     var scheduledNotifications by remember { mutableStateOf(listOf<ScheduledNotification>()) }
 
     val calendar = remember { Calendar.getInstance() }
+    
+    LaunchedEffect(Unit) {
+        val storedNotifications = storage.loadNotifications()
+        scheduledNotifications = storedNotifications.map { stored ->
+            ScheduledNotification(
+                id = stored.id,
+                title = stored.title,
+                content = stored.content,
+                scheduledTime = stored.scheduledTime
+            )
+        }
+    }
 
     Column(
         modifier = modifier
@@ -192,7 +209,7 @@ fun NotificationSchedulerScreen(modifier: Modifier = Modifier) {
         Button(
             onClick = {
                 if (title.isNotBlank() && content.isNotBlank()) {
-                    val notificationId = (scheduledNotifications.size + 1)
+                    val notificationId = storage.getNextNotificationId()
 
                     // 実際に通知をスケジュール
                     NotificationScheduler.scheduleNotification(
@@ -210,6 +227,15 @@ fun NotificationSchedulerScreen(modifier: Modifier = Modifier) {
                         content = content,
                         scheduledTime = selectedDate
                     )
+                    
+                    // ストレージに保存
+                    storage.addNotification(StoredNotification(
+                        id = notificationId,
+                        title = title,
+                        content = content,
+                        scheduledTime = selectedDate
+                    ))
+                    
                     scheduledNotifications = scheduledNotifications + newNotification
 
                     title = ""
@@ -238,6 +264,7 @@ fun NotificationSchedulerScreen(modifier: Modifier = Modifier) {
                     NotificationItem(
                         notification = notification,
                         onDelete = {
+                            storage.removeNotification(notification.id)
                             scheduledNotifications = scheduledNotifications.filter { it.id != notification.id }
                         }
                     )
