@@ -19,10 +19,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -252,10 +254,38 @@ fun NotificationSchedulerScreen(modifier: Modifier = Modifier) {
         }
 
         if (scheduledNotifications.isNotEmpty()) {
-            Text(
-                text = "スケジュール済み通知",
-                style = MaterialTheme.typography.titleMedium
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "スケジュール済み通知",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                
+                Button(
+                    onClick = {
+                        // 全ての通知をキャンセル
+                        val notificationIds = scheduledNotifications.map { it.id }
+                        NotificationScheduler.cancelAllNotifications(
+                            context,
+                            notificationIds,
+                            NotificationReceiver::class.java
+                        )
+                        // ストレージもクリア
+                        storage.clearAllNotifications()
+                        scheduledNotifications = emptyList()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Icon(Icons.Default.Clear, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("全削除")
+                }
+            }
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)

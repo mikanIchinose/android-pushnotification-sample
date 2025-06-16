@@ -49,6 +49,21 @@ object NotificationScheduler {
         alarmManager.cancel(pendingIntent)
     }
 
+    fun cancelAllNotifications(context: Context, notificationIds: List<Int>, receiverClass: Class<*>) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        
+        notificationIds.forEach { notificationId ->
+            val intent = Intent(context, receiverClass)
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            alarmManager.cancel(pendingIntent)
+        }
+    }
+
     fun scheduleRepeatingNotification(
         context: Context,
         notificationId: Int,
