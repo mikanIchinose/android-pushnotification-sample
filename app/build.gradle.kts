@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":pushnotification-local"))
+    
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxLifecycleRuntimeKtx)
     implementation(libs.androidxActivityCompose)
